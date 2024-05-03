@@ -1,0 +1,96 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+  output   = env("GENERATE_OUTPUT")
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Определение модели для пользователей
+model User {
+  id                      Int      @id @default(autoincrement())
+  username                String   @unique
+  email                   String   @unique
+  passwordHash            String
+  role                    Role
+  player                  Player?  @relation(fields: [playerId], references: [id])
+  coach                   Coach?   @relation(fields: [coachId], references: [id])
+  playerId                Int?     @unique
+  coachId                 Int?     @unique
+  resetPasswordToken      String?  // Поле для токена сброса пароля
+  resetPasswordTokenExpires DateTime? // Поле для времени истечения токена сброса пароля
+}
+
+
+// Определение ролей пользователей
+enum Role {
+  PLAYER
+  TRAINER
+}
+
+// Определение модели для игроков
+model Player {
+  id             Int              @id @default(autoincrement())
+  userId         Int // Ссылка на пользователя
+  country        String? // Дополнительные данные, такие как страна
+  team           Team?            @relation(fields: [teamId], references: [id]) // Ссылка на команду (может быть null, если игрок не состоит в команде)
+  ratings        Rating[] // Обратная связь для оценок
+  teamId         Int?
+  CompletedTrack CompletedTrack[]
+  Goal           Goal[]
+  User           User?
+}
+
+// Определение модели для тренеров
+model Coach {
+  id     Int    @id @default(autoincrement())
+  userId Int // Ссылка на пользователя
+  teams  Team[] // Ссылки на команды, которыми руководит тренер
+  User   User?
+}
+
+// Определение модели для рейтинга
+model Rating {
+  id              Int      @id @default(autoincrement())
+  player          Player   @relation(fields: [playerId], references: [id])
+  playerId        Int
+  date            DateTime
+  ppScore         Float // Рейтинг PP от scoresaber.com
+  beatleaderScore Float // Рейтинг в системе beatleader
+  globalRank      Int // Место по миру
+  countryRank     Int // Место в стране
+}
+
+// Определение модели для пройденных треков
+model CompletedTrack {
+  id        Int      @id @default(autoincrement())
+  player    Player   @relation(fields: [playerId], references: [id])
+  playerId  Int
+  date      DateTime
+  trackName String
+  stars     Int // Количество звёзд трека
+}
+
+// Определение модели для целей тренировок
+model Goal {
+  id             Int       @id @default(autoincrement())
+  player         Player    @relation(fields: [playerId], references: [id])
+  playerId       Int
+  goalType       String // Тип цели (пройти треки, обновить рекорды и т.д.)
+  parameters     String // Параметры цели (количество треков, количество звёзд и т.д.)
+  setDate        DateTime  @default(now()) // Дата установки цели
+  completionDate DateTime? // Дата достижения цели (может быть null, если цель не достигнута)
+}
+
+// Определение модели для команд
+model Team {
+  id      Int      @id @default(autoincrement())
+  name    String
+  players Player[] // Ссылки на участников команды
+  coach   Coach?   @relation(fields: [coachId], references: [id]) // Ссылка на тренера команды (может быть null)
+  coachId Int?
+}
