@@ -29,24 +29,32 @@ export class PlayerService {
         });
 
         await this.userService.setRoleId(userId, newPlayer.id, 'PLAYER')
-
         return this._toPlayerDto(newPlayer);
     }
 
-    findAll() {
-        return `This action returns all player`;
+    findPlayersByTeamId(teamId: number) {
+        return this.prisma.player.findMany({
+            where: {
+                teamId
+            }
+        });
     }
 
     findOne(id: number) {
-        return `This action returns a #${id} player`;
+        return this.prisma.player.findFirst({
+            where: {
+                id
+            }
+        });
     }
 
-    update(id: number, updatePlayerDto: UpdatePlayerDto) {
-        return `This action updates a #${id} player`;
-    }
-
-    remove(id: number) {
-        return `This action removes a #${id} player`;
+    update(id: number, playerInfo: UpdatePlayerDto) {
+        return this.prisma.player.update({
+            data: playerInfo,
+            where: {
+                id
+            }
+        });
     }
 
     private _toPlayerDto(player: Player): CreatePlayerDto {

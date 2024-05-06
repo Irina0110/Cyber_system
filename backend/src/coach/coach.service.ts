@@ -30,21 +30,23 @@ export class CoachService {
         return this._toCoachDto(newCoach);
     }
 
-    findAll() {
-        return `This action returns all coach`;
-    }
-
     findOne(id: number) {
-        return `This action returns a #${id} coach`;
+        return this.prisma.player.findFirst({
+            where: {
+                id
+            }
+        });
     }
 
-    update(id: number, updateCoachDto: UpdateCoachDto) {
-        return `This action updates a #${id} coach`;
+    update(id: number, coachInfo: UpdateCoachDto) {
+        return this.prisma.coach.update({
+            data: coachInfo,
+            where: {
+                id
+            }
+        });
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} coach`;
-    }
 
     private _toCoachDto(coach: Coach): CreateCoachDto {
         const {id, userId} = coach;

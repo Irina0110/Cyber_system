@@ -6,4 +6,10 @@ export class CreatePlayerDto {
     @ApiProperty()
     @IsNotEmpty()
     userId: number;
+
+    @ApiProperty({required: false})
+    beatLeaderId?: bigint;
+
+    @ApiProperty({required: false})
+    scoreSaberId?: bigint;
 }
