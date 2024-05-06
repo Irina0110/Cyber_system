@@ -17,7 +17,7 @@ Backend of the project "Training and statistics recording system for an eSports 
 [![Nest][Nest]][Nest-url]
 [![PostgreSQL][Postgres]][Postgres-url]
 [![TypeScript][Typescript.js]][Typescript-url]
-[![Prisma][Prisma][Prisma-url]
+[![Prisma][Prisma]][Prisma-url]
 
 ---
 
@@ -110,6 +110,6 @@ Backend of the project "Training and statistics recording system for an eSports 
 
 [Typescript-url]:https://www.typescriptlang.org/
 
-[Prisma]: https://img.shields.io/badge/Axios-007ACC?style=for-the-badge&logo=axios&color=blueviolet
+[Prisma]: https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white
 
 [Prisma-url]: https://www.prisma.io/
