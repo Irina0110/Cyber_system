@@ -11,7 +11,6 @@ export class CronesService {
     constructor(private readonly playersService: PlayerService, private readonly prismaService: PrismaService) {
     }
 
-
     @Cron(CronExpression.EVERY_10_HOURS)
     async updatePlayersData() {
         try {
