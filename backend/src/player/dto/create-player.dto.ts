@@ -8,8 +8,8 @@ export class CreatePlayerDto {
     userId: number;
 
     @ApiProperty({required: false})
-    beatLeaderId?: bigint;
+    beatLeaderId?: string;
 
     @ApiProperty({required: false})
-    scoreSaberId?: bigint;
+    scoreSaberId?: string;
 }

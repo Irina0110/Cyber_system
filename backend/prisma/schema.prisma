@@ -12,19 +12,18 @@ datasource db {
 
 // Определение модели для пользователей
 model User {
-  id                      Int      @id @default(autoincrement())
-  username                String   @unique
-  email                   String   @unique
-  passwordHash            String
-  role                    Role
-  player                  Player?  @relation(fields: [playerId], references: [id])
-  coach                   Coach?   @relation(fields: [coachId], references: [id])
-  playerId                Int?     @unique
-  coachId                 Int?     @unique
-  resetPasswordToken      String?  // Поле для токена сброса пароля
+  id                        Int       @id @default(autoincrement())
+  username                  String    @unique
+  email                     String    @unique
+  passwordHash              String
+  role                      Role
+  player                    Player?   @relation(fields: [playerId], references: [id])
+  coach                     Coach?    @relation(fields: [coachId], references: [id])
+  playerId                  Int?      @unique
+  coachId                   Int?      @unique
+  resetPasswordToken        String? // Поле для токена сброса пароля
   resetPasswordTokenExpires DateTime? // Поле для времени истечения токена сброса пароля
 }
-
 
 // Определение ролей пользователей
 enum Role {
@@ -34,16 +33,105 @@ enum Role {
 
 // Определение модели для игроков
 model Player {
-  id             Int              @id @default(autoincrement())
-  userId         Int              @unique
-  team           Team?            @relation(fields: [teamId], references: [id]) // Ссылка на команду (может быть null, если игрок не состоит в команде)
-  ratings        Rating[] // Обратная связь для оценок
-  teamId         Int?
-  scoreSaberId   BigInt?
-  beatLeaderId   BigInt?
-  CompletedTrack CompletedTrack[]
-  Goal           Goal[]
-  User           User?
+  id                   Int                   @id @default(autoincrement())
+  userId               Int                   @unique
+  team                 Team?                 @relation(fields: [teamId], references: [id]) // Ссылка на команду (может быть null, если игрок не состоит в команде)
+  avatar               String?
+  ratings              Rating[] // Обратная связь для оценок
+  teamId               Int?
+  scoreSaberId         String?
+  beatLeaderId         String?
+  CompletedTrack       CompletedTrack[]
+  Goal                 Goal[]
+  User                 User?
+  BeatLeaderStatistics BeatLeaderStatistics?
+  ScoreSaberStatistics ScoreSaberStatistics?
+}
+
+// Определение модели статистики с beatLeader
+model BeatLeaderStatistics {
+  id                            Int     @id @default(autoincrement())
+  playerId                      Int     @unique
+  player                        Player? @relation(fields: [playerId], references: [id])
+  accPp                         Int?
+  passPp                        Int?
+  techPp                        Int?
+  totalScore                    String?
+  totalUnrankedScore            String?
+  totalRankedScore              String?
+  lastScoreTime                 String?
+  lastUnrankedScoreTime         String?
+  lastRankedScoreTime           String?
+  averageRankedAccuracy         Float?
+  averageWeightedRankedAccuracy Float?
+  averageUnrankedAccuracy       Float?
+  averageAccuracy               Float?
+  medianRankedAccuracy          Float?
+  medianAccuracy                Float?
+  topRankedAccuracy             Float?
+  topUnrankedAccuracy           Float?
+  topAccuracy                   Float?
+  topPp                         Float?
+  topBonusPP                    Float?
+  topPassPP                     Float?
+  topAccPP                      Float?
+  topTechPP                     Float?
+  peakRank                      Int?
+  rankedMaxStreak               Int?
+  unrankedMaxStreak             Int?
+  maxStreak                     Int?
+  averageLeftTiming             Float?
+  averageRightTiming            Float?
+  rankedPlayCount               Int?
+  unrankedPlayCount             Int?
+  totalPlayCount                Int?
+  rankedImprovementsCount       Int?
+  unrankedImprovementsCount     Int?
+  totalImprovementsCount        Int?
+  rankedTop1Count               Int?
+  unrankedTop1Count             Int?
+  top1Count                     Int?
+  rankedTop1Score               Float?
+  unrankedTop1Score             Float?
+  top1Score                     Float?
+  averageRankedRank             Float?
+  averageWeightedRankedRank     Float?
+  averageUnrankedRank           Float?
+  averageRank                   Float?
+  sspPlays                      Int?
+  ssPlays                       Int?
+  spPlays                       Int?
+  sPlays                        Int?
+  aPlays                        Int?
+  topPlatform                   String?
+  topHMD                        Int?
+  topPercentile                 Float?
+  countryTopPercentile          Float?
+  dailyImprovements             Int?
+  authorizedReplayWatched       Int?
+  anonimusReplayWatched         Int?
+  watchedReplays                Int?
+  lastWeekPp                    Float?
+  lastWeekRank                  Int?
+  lastWeekCountryRank           Int?
+  pp                            Float?
+  rank                          Int?
+  countryRank                   Int?
+}
+
+model ScoreSaberStatistics {
+  id                    Int     @id @default(autoincrement())
+  playerId              Int     @unique
+  player                Player? @relation(fields: [playerId], references: [id])
+  pp                    Float?
+  rank                  Int?
+  countryRank           Int?
+  totalScore            String?
+  totalRankedScore      String?
+  averageRankedAccuracy Float?
+  totalPlayCount        Int?
+  rankedPlayCount       Int?
+  replaysWatched        Int?
 }
 
 // Определение модели для тренеров

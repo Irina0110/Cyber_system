@@ -9,6 +9,7 @@ import { TeamModule } from './team/team.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaService } from './prisma.service';
 import { EventsModule } from './events/events.module';
+import { CronesModule } from './crones/crones.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { EventsModule } from './events/events.module';
     TeamModule,
     AuthModule,
     EventsModule,
+    CronesModule,
   ],
   providers: [PrismaService],
   exports: [PrismaService],

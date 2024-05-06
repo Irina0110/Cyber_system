@@ -40,6 +40,12 @@ export class PlayerService {
         });
     }
 
+    findPlayersToUpdate() {
+        return this.prisma.player.findMany({
+            where: { beatLeaderId: { not: null } },
+        });
+    }
+
     findOne(id: number) {
         return this.prisma.player.findFirst({
             where: {
@@ -50,7 +56,10 @@ export class PlayerService {
 
     update(id: number, playerInfo: UpdatePlayerDto) {
         return this.prisma.player.update({
-            data: playerInfo,
+            data: {
+                beatLeaderId: playerInfo.beatLeaderId?.toString(),
+                scoreSaberId: playerInfo.scoreSaberId?.toString(),
+            },
             where: {
                 id
             }
