@@ -1,73 +1,115 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Cyber system: BACKEND
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+URL: https://github.com/Irina0110/Cyber_system/tree/main/backend
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## About
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Бэкенд проекта "Система учета тренировок и статистики для команды по киберспорту"
+
+Backend of the project "Training and statistics recording system for an eSports team"
+
+---
+
+## Built With
+
+[![Nest][Nest]][Nest-url]
+[![PostgreSQL][Postgres]][Postgres-url]
+[![TypeScript][Typescript.js]][Typescript-url]
+[![Prisma][Prisma][Prisma-url]
+
+---
 
 ## Installation
 
-```bash
-$ npm install
-```
+1. Выполните `git clone` репозитория
+   ```sh
+   git clone https://github.com/Irina0110/Cyber_system/tree/main/backend
+   ```
+2. Установите зависимости
+    ```sh
+   npm install
+    ```
 
-## Running the app
+3. Создайте файл .env в корне `<project>/backend/.env` и добавьте параметры
+   ```js
+   DATABASE_URL="postgresql://user:password@localhost:5432/db_name?schema=public"
 
-```bash
-# development
-$ npm run start
+   GENERATE_OUTPUT=generated
+   PORT=
 
-# watch mode
-$ npm run start:dev
+   EMAIL='' //Email для рассылки
+   EMAIL_PASS='' //Пароль от почты для внешнего приложение
+   EMAIL_NAME='' //Имя отправителя
 
-# production mode
-$ npm run start:prod
-```
+   TOKEN_EXPIRES_IN=3600000 // Срок действия токена
+   JWT_SECRET='' 
+   ```
+   
+4. Инициалируйте Prisma 
+    ```sh
+   npx prisma migrate dev  
+   npx prisma generate  
+    ```
 
-## Test
+5. Запустите проект
+    ```sh
+   npm run start
+    ```
 
-```bash
-# unit tests
-$ npm run test
+---
 
-# e2e tests
-$ npm run test:e2e
+1. Clone the repo
+   ```sh
+   git clone https://github.com/Irina0110/Cyber_system/tree/main/backend
+   ```
 
-# test coverage
-$ npm run test:cov
-```
+2. Install NPM packages
+    ```sh
+   npm install
+    ```
 
-## Support
+3. Create file .env in `<project>/backend/.env` and add parameters
+   ```js
+   DATABASE_URL="postgresql://user:password@localhost:5432/db_name?schema=public"
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+   GENERATE_OUTPUT=generated
+   PORT=
 
-## Stay in touch
+   EMAIL='' //Email
+   EMAIL_PASS='' //Password
+   EMAIL_NAME='' //Name
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+   TOKEN_EXPIRES_IN=3600000
+   JWT_SECRET='' 
+   ```
 
-## License
+4. Initialize Prisma
+    ```sh
+   npx prisma migrate dev  
+   npx prisma generate  
+    ```
 
-Nest is [MIT licensed](LICENSE).
+5. Run the project
+    ```sh
+   npm run start
+    ```
+
+---
+
+[Nest]: https://img.shields.io/badge/nestjs-E0234E?style=for-the-badge&logo=nestjs&logoColor=white
+
+[Nest-url]: https://docs.nestjs.com/
+
+[Postgres]:   https://img.shields.io/badge/postgresql-4169e1?style=for-the-badge&logo=postgresql&logoColor=white
+
+[Postgres-url]: https://www.postgresql.org/
+
+[Typescript.js]:    https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white
+
+[Typescript-url]:https://www.typescriptlang.org/
+
+[Prisma]: https://img.shields.io/badge/Axios-007ACC?style=for-the-badge&logo=axios&color=blueviolet
+
+[Prisma-url]: https://www.prisma.io/
