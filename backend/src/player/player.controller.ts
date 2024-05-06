@@ -23,7 +23,7 @@ export class PlayerController {
     }
 
 
-    @Get(':teamId')
+    @Get('/team/:teamId')
     findPlayersByTeamId(@Param('teamId') teamId: string) {
         return this.playerService.findPlayersByTeamId(+teamId);
     }
