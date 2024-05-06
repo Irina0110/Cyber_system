@@ -1,26 +1,58 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTeamDto } from './dto/create-team.dto';
-import { UpdateTeamDto } from './dto/update-team.dto';
+import {Injectable, NotFoundException} from '@nestjs/common';
+import {CreateTeamDto} from './dto/create-team.dto';
+import {UpdateTeamDto} from './dto/update-team.dto';
+import {PrismaService} from "../prisma.service";
+import {Team} from "../../prisma/generated";
 
 @Injectable()
 export class TeamService {
-  create(createTeamDto: CreateTeamDto) {
-    return 'This action adds a new team';
-  }
+    constructor(private prisma: PrismaService) {
+    }
 
-  findAll() {
-    return `This action returns all team`;
-  }
+    async create(teamDto: CreateTeamDto) {
+        const {name, coachId} = teamDto;
 
-  findOne(id: number) {
-    return `This action returns a #${id} team`;
-  }
+        const coach =  await this.prisma.coach.findUnique({where: {id: coachId}});
 
-  update(id: number, updateTeamDto: UpdateTeamDto) {
-    return `This action updates a #${id} team`;
-  }
+        if (!coach) {
+            throw new NotFoundException('Coach not found');
+        }
 
-  remove(id: number) {
-    return `This action removes a #${id} team`;
-  }
+        const newTeam = await this.prisma.team.create({
+            data: {
+                name, coachId
+            },
+        });
+        return this._toTeamDto(newTeam)
+    }
+
+    findAllTeamWithCoach(coachId: number) {
+        return this.prisma.team.findMany({
+            where: {
+                coachId
+            }
+        });
+    }
+
+    findOne(id: number) {
+        return this.prisma.team.findUnique({
+            where: {
+                id: id
+            }
+        });
+    }
+
+    update(id: number, teamInfo: UpdateTeamDto) {
+        return this.prisma.team.update({
+            data: teamInfo,
+            where: {
+                id
+            }
+        });
+    }
+
+    private _toTeamDto(team: Team): CreateTeamDto {
+        const {id, name, coachId} = team;
+        return {id, name, coachId};
+    }
 }
