@@ -8,6 +8,7 @@ import { GoalModule } from './goal/goal.module';
 import { TeamModule } from './team/team.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaService } from './prisma.service';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PrismaService } from './prisma.service';
     GoalModule,
     TeamModule,
     AuthModule,
+    EventsModule,
   ],
   providers: [PrismaService],
   exports: [PrismaService],

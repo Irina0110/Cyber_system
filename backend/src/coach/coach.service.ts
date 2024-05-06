@@ -1,26 +1,53 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCoachDto } from './dto/create-coach.dto';
-import { UpdateCoachDto } from './dto/update-coach.dto';
+import {Injectable, NotFoundException} from '@nestjs/common';
+import {CreateCoachDto} from './dto/create-coach.dto';
+import {UpdateCoachDto} from './dto/update-coach.dto';
+import {Coach} from "../../prisma/generated";
+import {PrismaService} from "../prisma.service";
+import {UserService} from "../user/user.service";
+import {EventService} from "../events/events.service";
 
 @Injectable()
 export class CoachService {
-  create(createCoachDto: CreateCoachDto) {
-    return 'This action adds a new coach';
-  }
+    constructor(private prisma: PrismaService, private readonly userService: UserService, private readonly eventService: EventService) {
+        this.eventService.onUserCreatedAsCoach(this.create.bind(this));
+    }
 
-  findAll() {
-    return `This action returns all coach`;
-  }
+    async create(coachDto: CreateCoachDto): Promise<CreateCoachDto> {
+        const {userId} = coachDto;
+        const existingCoach = await this.prisma.coach.findUnique({where: {userId}});
 
-  findOne(id: number) {
-    return `This action returns a #${id} coach`;
-  }
+        if (existingCoach) {
+            throw new NotFoundException('Coach already exists');
+        }
 
-  update(id: number, updateCoachDto: UpdateCoachDto) {
-    return `This action updates a #${id} coach`;
-  }
+        const newCoach = await this.prisma.coach.create({
+            data: {
+                userId
+            },
+        });
 
-  remove(id: number) {
-    return `This action removes a #${id} coach`;
-  }
+        await this.userService.setRoleId(userId, newCoach.id, 'COACH')
+        return this._toCoachDto(newCoach);
+    }
+
+    findAll() {
+        return `This action returns all coach`;
+    }
+
+    findOne(id: number) {
+        return `This action returns a #${id} coach`;
+    }
+
+    update(id: number, updateCoachDto: UpdateCoachDto) {
+        return `This action updates a #${id} coach`;
+    }
+
+    remove(id: number) {
+        return `This action removes a #${id} coach`;
+    }
+
+    private _toCoachDto(coach: Coach): CreateCoachDto {
+        const {id, userId} = coach;
+        return {id, userId};
+    }
 }

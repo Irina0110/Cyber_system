@@ -8,6 +8,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config'; // Import ConfigMo
 import { UserModule } from '../user/user.module';
 import { PrismaService } from '../prisma.service';
 import { UserService } from '../user/user.service';
+import {PlayerService} from "../player/player.service";
+import {CoachService} from "../coach/coach.service";
+import {EventService} from "../events/events.service";
+import {EventEmitter2} from "@nestjs/event-emitter";
 
 @Module({
   imports: [
@@ -30,7 +34,7 @@ import { UserService } from '../user/user.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [UserService, AuthService, JwtStrategy, PrismaService],
+  providers: [UserService, AuthService, JwtStrategy, PrismaService, PlayerService, CoachService, EventService, EventEmitter2],
   exports: [PassportModule, JwtModule],
 })
 export class AuthModule {}

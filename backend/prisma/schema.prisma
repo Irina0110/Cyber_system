@@ -29,17 +29,18 @@ model User {
 // Определение ролей пользователей
 enum Role {
   PLAYER
-  TRAINER
+  COACH
 }
 
 // Определение модели для игроков
 model Player {
   id             Int              @id @default(autoincrement())
-  userId         Int // Ссылка на пользователя
-  country        String? // Дополнительные данные, такие как страна
+  userId         Int              @unique
   team           Team?            @relation(fields: [teamId], references: [id]) // Ссылка на команду (может быть null, если игрок не состоит в команде)
   ratings        Rating[] // Обратная связь для оценок
   teamId         Int?
+  scoreSaberId   BigInt?
+  beatLeaderId   BigInt?
   CompletedTrack CompletedTrack[]
   Goal           Goal[]
   User           User?
@@ -48,7 +49,7 @@ model Player {
 // Определение модели для тренеров
 model Coach {
   id     Int    @id @default(autoincrement())
-  userId Int // Ссылка на пользователя
+  userId Int    @unique
   teams  Team[] // Ссылки на команды, которыми руководит тренер
   User   User?
 }
