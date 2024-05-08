@@ -126,15 +126,16 @@ export class UserService {
     }
 
     async setResetPasswordToken(userId: number, token: string): Promise<void> {
+        const expirationDate = new Date();
+        expirationDate.setMilliseconds(expirationDate.getMilliseconds() + parseInt(process.env.TOKEN_EXPIRES_IN));
+
         await this.prisma.user.update({
             where: {
                 id: userId,
             },
             data: {
                 resetPasswordToken: token,
-                resetPasswordTokenExpires: new Date(
-                    new Date().getTime() + process.env.TOKEN_EXPIRES_IN,
-                ),
+                resetPasswordTokenExpires: expirationDate,
             },
         });
     }

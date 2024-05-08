@@ -19,6 +19,7 @@ import { RegistrationStatus } from './interfaces/registration-status.interface';
 import { LoginUserDto } from '../user/dto/user-login.dto';
 import { ApiTags } from '@nestjs/swagger';
 import {
+  CheckTokenDto,
   ResetPasswordDto,
   ResetPasswordRequestDto,
 } from './dto/reset-password.dto';
@@ -66,5 +67,12 @@ export class AuthController {
     @Body() resetPasswordDto: ResetPasswordDto,
   ): Promise<void> {
     await this.authService.resetPassword(resetPasswordDto);
+  }
+
+  @Post('check-token')
+  public async checkToken(
+      @Body() checkTokenDto: CheckTokenDto,
+  ): Promise<{tokenValid: boolean }> {
+    return await this.authService.checkToken(checkTokenDto);
   }
 }
