@@ -39,7 +39,7 @@ export class AuthService {
   async register(userDto: CreateUserDto): Promise<RegistrationStatus> {
     let status: RegistrationStatus = {
       success: true,
-      message: 'user registered',
+      message: 'User registered',
     };
 
     try {
@@ -49,7 +49,6 @@ export class AuthService {
         success: false,
         message: err.message,
       };
-      console.log(status)
     }
 
     return status;
