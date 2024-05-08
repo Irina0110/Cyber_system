@@ -15,7 +15,7 @@ model User {
   id                        Int       @id @default(autoincrement())
   username                  String    @unique
   email                     String    @unique
-  passwordHash              String
+  password                  String
   role                      Role
   player                    Player?   @relation(fields: [playerId], references: [id])
   coach                     Coach?    @relation(fields: [coachId], references: [id])

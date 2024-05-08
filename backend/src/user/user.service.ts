@@ -35,7 +35,7 @@ export class UserService {
             throw new NotFoundException('User not found');
         }
 
-        const areEqual = await compare(password, user.passwordHash);
+        const areEqual = await compare(password, user.password);
 
         if (!areEqual) {
             throw new UnauthorizedException('Invalid credentials');
@@ -57,22 +57,29 @@ export class UserService {
     }
 
     async create(userDto: CreateUserDto): Promise<CreateUserDto> {
-        const {username, passwordHash, email, role} = userDto;
+        const {username, password, email, role} = userDto;
 
         const existingUser = await this.prisma.user.findUnique({
             where: {username},
         });
+        const existingUserByEmail = await this.prisma.user.findUnique({
+            where: {email},
+        });
         if (existingUser) {
-            throw new NotFoundException('User already exists');
+            throw new NotFoundException('This username is already used');
+        }
+
+        if (existingUserByEmail) {
+            throw new NotFoundException('This email is already used');
         }
 
         const salt = await genSalt(10);
-        const hashPassword = await hash(passwordHash, salt);
+        const hashPassword = await hash(password, salt);
 
         const newUser = await this.prisma.user.create({
             data: {
                 username,
-                passwordHash: hashPassword,
+                password: hashPassword,
                 email,
                 role,
             },
@@ -95,7 +102,7 @@ export class UserService {
                 id: userId,
             },
             data: {
-                passwordHash: hashedPassword,
+                password: hashedPassword,
                 resetPasswordToken: null,
                 resetPasswordTokenExpires: null,
             },
@@ -152,7 +159,7 @@ export class UserService {
     }
 
     private _toUserDto(user: User): CreateUserDto {
-        const {id, username, email, role, passwordHash} = user;
-        return {id, username, email, role, passwordHash};
+        const {id, username, email, role, password} = user;
+        return {id, username, email, role, password};
     }
 }
