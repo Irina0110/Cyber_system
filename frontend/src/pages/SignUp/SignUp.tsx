@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useCallback} from "react";
 import './SignUp.scss';
 import {useForm} from "react-hook-form";
 import {z} from "zod"
@@ -16,10 +16,16 @@ import {cn} from "@/lib/utils.ts";
 import {Button} from "@/components/common/Button/Button.tsx";
 import Logo from '../../../public/Logo.svg?url'
 import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group.tsx";
+import {auth} from "@/services/auth.tsx";
+import {routes} from "@/router/routes.ts";
+import {useNavigate} from "react-router-dom";
 
 const CLASS = 'sign-up-page'
 
 export const SignUpPage: FC = () => {
+    const navigate = useNavigate();
+    const onNavigate = useCallback((url: string) => navigate(`${url}`, {state: true}), [navigate]);
+
     // Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character
     const passwordValidation = new RegExp(
         /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
@@ -66,7 +72,18 @@ export const SignUpPage: FC = () => {
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log(values)
+        auth.signup({
+            email: values.email,
+            password: values.password,
+            role: values.role,
+            username: values.login
+        }).then((response) => {
+            if (response.data.success) {
+                onNavigate(routes.auth.login)
+            } else {
+                form.setError('root', {message: response.data.message})
+            }
+        })
     }
 
     return (
@@ -110,7 +127,7 @@ export const SignUpPage: FC = () => {
                         <FormItem className={'w-2/3'}>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <Input placeholder="password" {...field} type={'password'}/>
+                                <Input placeholder="password" {...field} />
                             </FormControl>
                             <FormMessage/>
                         </FormItem>
@@ -123,7 +140,7 @@ export const SignUpPage: FC = () => {
                         <FormItem className={'w-2/3'}>
                             <FormLabel>Confirm password</FormLabel>
                             <FormControl>
-                                <Input placeholder="Confirm password" {...field} type={'password'}/>
+                                <Input placeholder="Confirm password" {...field} />
                             </FormControl>
                             <FormMessage/>
                         </FormItem>
@@ -163,6 +180,7 @@ export const SignUpPage: FC = () => {
                         </FormItem>
                     )}
                 />
+                {form.formState.errors.root && <FormMessage>{form.formState.errors.root.message}</FormMessage>}
                 <div className={`${CLASS}__buttons`}>
                     <Button type={'submit'} size={'s'} label={'Sign up'}/>
                 </div>

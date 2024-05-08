@@ -58,18 +58,15 @@ function post<RequestBody, ResponseBody>(url: string, body: RequestBody): Promis
 
     return fetch(`${urlBase}${url}`, params)
         .then((response) => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
             return response.json();
         })
         .then((data) => ({
             data,
-            status: 200,
+            status: data.status,
             statusText: 'OK'
         }))
         .catch((error) => {
-            console.log('Error:', error.message);
-            throw error;
+            console.log('Error:', error);
+            return error;
         });
 }
