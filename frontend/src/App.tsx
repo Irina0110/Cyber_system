@@ -14,7 +14,7 @@ export const Root = () => {
                 path={router.path}
                 element={
                     router.isProtected ?
-                        <ProtectRoute rule={!tokenExpires || tokenExpires > Date.now().toString()}>
+                        <ProtectRoute rule={!!tokenExpires || (tokenExpires ? +tokenExpires : 0) > Date.now()}>
                             {router?.isLayout ? <div>{router.element}</div> : router.element}
                         </ProtectRoute>
                         : router?.isLayout ? (
