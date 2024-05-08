@@ -17,6 +17,7 @@ import {Button} from "@/components/common/Button/Button.tsx";
 import Logo from '../../../public/Logo-full.svg?url'
 import {useNavigate} from "react-router-dom";
 import {routes} from "@/router/routes.ts";
+import {auth} from "@/services/auth.tsx";
 
 const CLASS = 'login-page'
 
@@ -26,7 +27,7 @@ export const LoginPage: FC = () => {
     const onNavigate = useCallback((url: string) => navigate(`${url}`, {state: true}), [navigate]);
 
     const formSchema = z.object({
-        login: z.string(
+        username: z.string(
             {
                 invalid_type_error: "Login is required"
             }
@@ -42,12 +43,21 @@ export const LoginPage: FC = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            login: '',
+            username: '',
             password: ''
         },
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log(values)
+        auth.login(values).then((response) => {
+            console.log(response)
+            if (response.status == 200) {
+                localStorage.setItem('token', response.data.accessToken);
+                localStorage.setItem('tokenExpires', response.data.expiresIn);
+            }
+            onNavigate('/')
+        }).catch(() => {
+            form.setError('root', {message: "User doesn't exist"})
+        })
     }
 
     return (
@@ -56,7 +66,7 @@ export const LoginPage: FC = () => {
                 <img src={Logo} alt={'logo'} className={`${CLASS}__logo`}/>
                 <FormField
                     control={form.control}
-                    name="login"
+                    name="username"
                     render={({field}) => (
                         <FormItem className={'w-2/3'}>
                             <FormLabel>Login / Email</FormLabel>
@@ -74,12 +84,14 @@ export const LoginPage: FC = () => {
                         <FormItem className={'w-2/3'}>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <Input placeholder="password" {...field}/>
+                                <Input placeholder="password" {...field} type={'password'}/>
                             </FormControl>
                             <FormMessage/>
                         </FormItem>
                     )}
                 />
+
+                {form.formState.errors.root && <FormMessage>{form.formState.errors.root.message}</FormMessage>}
                 <div className={`${CLASS}__buttons`}>
                     <Button type={'submit'} size={'s'} label={'Sign in'}/>
                     <Button type={'button'} size={'s'} label={'Sign up'} view={'ghost'}
