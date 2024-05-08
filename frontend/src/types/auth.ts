@@ -18,3 +18,11 @@ export type AUTH_SIGN_UP_RESPONSE = {
     success: boolean;
     message: string;
 }
+
+export type CHECK_TOCKEN = {
+    token: string
+}
+
+export type CHECK_TOCKEN_RESPONSE = {
+    tokenValid: boolean
+}

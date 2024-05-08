@@ -1,6 +1,8 @@
 import {LoginPage} from "@/pages/Login/Login.tsx";
 import {SignUpPage} from "@/pages/SignUp/SignUp.tsx";
 import {routes} from "@/router/routes.ts";
+import {ResetPasswordPage} from "@/pages/ResetPassword/ResetPassword.tsx";
+import {Error} from "@/pages/Error/Error.tsx";
 
 
 export const Elements = [
@@ -21,5 +23,17 @@ export const Elements = [
         path: routes.auth.signup,
         isLayout: false,
         element: <SignUpPage/>
+    },
+    {
+        isProtected: false,
+        path: routes.auth.reset,
+        isLayout: false,
+        element: <ResetPasswordPage/>
+    },
+    {
+        isProtected: false,
+        path: routes.error,
+        isLayout: false,
+        element: <Error/>
     },
 ]
