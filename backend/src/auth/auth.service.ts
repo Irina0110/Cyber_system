@@ -38,6 +38,7 @@ export class AuthService {
 
   async register(userDto: CreateUserDto): Promise<RegistrationStatus> {
     let status: RegistrationStatus = {
+      status: 200,
       success: true,
       message: 'User registered',
     };
@@ -46,6 +47,7 @@ export class AuthService {
       await this.usersService.create(userDto);
     } catch (err) {
       status = {
+        status: 400,
         success: false,
         message: err.message,
       };
