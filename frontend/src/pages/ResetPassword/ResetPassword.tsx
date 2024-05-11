@@ -34,7 +34,7 @@ export const ResetPasswordPage: FC = () => {
         if (token) {
             auth.checkToken({token}).then((response) => {
                 if (!response.data.tokenValid) {
-                    //onNavigate(routes.error)
+                    onNavigate(routes.error)
                 } else {
                     setIsValidToken(response.data.tokenValid)
                 }
@@ -72,7 +72,7 @@ export const ResetPasswordPage: FC = () => {
                         <FormItem className={'w-2/3'}>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <Input placeholder="password" {...field} type={'password'}/>
+                                <Input placeholder="Enter new password" {...field} type={'password'}/>
                             </FormControl>
                             <FormMessage/>
                         </FormItem>
@@ -81,9 +81,7 @@ export const ResetPasswordPage: FC = () => {
 
                 {form.formState.errors.root && <FormMessage>{form.formState.errors.root.message}</FormMessage>}
                 <div className={`${CLASS}__buttons`}>
-                    <Button type={'submit'} size={'s'} label={'Sign in'}/>
-                    <Button type={'button'} size={'s'} label={'Sign up'} view={'ghost'}
-                            onClick={() => onNavigate(routes.auth.signup)}/>
+                    <Button type={'submit'} size={'s'} label={'Change password'}/>
                 </div>
             </form>
         </Form>

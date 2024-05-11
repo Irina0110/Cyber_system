@@ -5,5 +5,6 @@ export const routes = {
         signup: '/signUp',
         reset: '/reset'
     },
-    error: '/error'
+    error: '/error',
+    notFound: '*'
 }

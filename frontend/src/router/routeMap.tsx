@@ -36,4 +36,10 @@ export const Elements = [
         isLayout: false,
         element: <Error/>
     },
+    {
+        isProtected: false,
+        path: routes.notFound,
+        isLayout: false,
+        element: <Error/>
+    },
 ]
