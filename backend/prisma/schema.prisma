@@ -23,6 +23,7 @@ model User {
   coachId                   Int?      @unique
   resetPasswordToken        String? // Поле для токена сброса пароля
   resetPasswordTokenExpires DateTime? // Поле для времени истечения токена сброса пароля
+  currentToken              String?
 }
 
 // Определение ролей пользователей

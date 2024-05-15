@@ -1,4 +1,4 @@
-import {Injectable, HttpException, HttpStatus} from '@nestjs/common';
+import {Injectable, HttpException, HttpStatus, Req} from '@nestjs/common';
 import {LoginStatus} from './interfaces/login-status.interface';
 import {JwtPayload} from './interfaces/payload.interface';
 import {JwtService} from '@nestjs/jwt';
@@ -62,7 +62,11 @@ export class AuthService {
     async login(loginUserDto: LoginUserDto): Promise<LoginStatus> {
         const user = await this.usersService.findByLogin(loginUserDto);
         const token = this._createToken(user);
+        await this.usersService.updateSessionToken(user.id, token.accessToken)
+
         return {
+            id: user.id,
+            role: user.role,
             username: user.username,
             ...token,
         };
@@ -103,22 +107,11 @@ export class AuthService {
         if (!user) {
             throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         }
-
-        // Генерируем токен сброса пароля
         const resetToken = crypto.randomBytes(20).toString('hex');
         const resetLink = `${process.env.CLIENT_URL}/reset?token=${encodeURIComponent(resetToken)}`;
-
-        // Чтение содержимого email.html
         const indexHtml = fs.readFileSync('src/templates/email.html', 'utf8');
-
-        // Замена метки в index.html на ссылку для сброса пароля
         const modifiedIndexHtml = indexHtml.replace('{{resetLink}}', resetLink);
-
-
-        // Устанавливаем токен и время его истечения в профиле пользователя
         await this.usersService.setResetPasswordToken(user.id, resetToken);
-
-        // Отправляем электронное письмо с инструкциями для сброса пароля и токеном на email пользователя
         await this.sendResetEmail(user.email, modifiedIndexHtml);
     }
 
@@ -138,12 +131,27 @@ export class AuthService {
         await this.transporter.sendMail(mailOptions);
     }
 
-    private _createToken({username}: CreateUserDto): any {
-        const expiresIn = new Date().getTime() + process.env.TOKEN_EXPIRES_IN;
-        const user: JwtPayload = {username};
+    async logout(request: Request): Promise<void> {
+        const token = request.headers['authorization'];
+        const tokenValue = token.replace('Bearer ', '');
+        const decodedToken = this.jwtService.verify(tokenValue);
+
+        if (!token) {
+            throw new Error('Authorization header is missing');
+        }
+        await this.usersService.invalidateToken(decodedToken.id, tokenValue);
+    }
+
+
+    private _createToken({id, username, role, email}: CreateUserDto): any {
+        const expiresIn = new Date().getTime() + +process.env.TOKEN_EXPIRES_IN;
+        const user: JwtPayload = {id, username, role, email};
         const accessToken = this.jwtService.sign(user);
 
         return {
+            id,
+            role,
+            email,
             expiresIn,
             accessToken,
         };
