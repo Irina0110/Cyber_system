@@ -17,6 +17,15 @@ export class UserService {
     ) {
     }
 
+    async findUserById(idUser: number) {
+        const {id, username, email, role} = await this.prisma.user.findUnique({
+            where: {
+                id: idUser
+            }
+        })
+        return {id, username, email, role};
+    }
+
     async findOne(options): Promise<CreateUserDto | null> {
         const user = await this.prisma.user.findUnique(options);
         return user ? this._toUserDto(user) : null;
@@ -109,6 +118,17 @@ export class UserService {
         });
     }
 
+    async updateSessionToken(userId: number, token: string): Promise<void> {
+        await this.prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                currentToken: token,
+            },
+        });
+    }
+
     async verifyResetPasswordToken(token: string): Promise<number | null> {
         const user = await this.prisma.user.findFirst({
             where: {
@@ -157,6 +177,25 @@ export class UserService {
             },
             data: data,
         });
+    }
+
+    async invalidateToken(userId: string, tokenToInvalidate: string): Promise<void> {
+        // Предположим, что у вас есть модель пользователя (UserModel) с полем tokens, где хранятся активные токены
+        // Вы можете удалить токен из этого списка
+        const user = await this.prisma.user.findUnique({where: {id: +userId}});
+
+        if (user.currentToken === tokenToInvalidate) {
+            // Удаляем текущий токен пользователя
+            user.currentToken = null;
+            // Сохраняем изменения в базе данных
+            await this.prisma.user.update({
+                where: { id: +userId },
+                data: { currentToken: null },
+            });
+        } else {
+            // Если токен не совпадает, можно бросить исключение или просто ничего не делать
+            throw new Error('Provided token does not match the user current token.');
+        }
     }
 
     private _toUserDto(user: User): CreateUserDto {
