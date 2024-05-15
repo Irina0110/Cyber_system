@@ -7,11 +7,12 @@ import {
 } from '@nestjs/common';
 import {UserService} from './user.service';
 import {CreateUserDto} from './dto/create-user.dto';
-import {ApiTags} from '@nestjs/swagger';
+import {ApiBearerAuth, ApiTags} from '@nestjs/swagger';
 import {AuthGuard} from "../auth/auth.guard";
 
 @ApiTags('user')
 @Controller('user')
+@ApiBearerAuth()
 export class UserController {
     constructor(private readonly userService: UserService) {
     }
@@ -25,6 +26,6 @@ export class UserController {
     @Get(':id')
     @UseGuards(AuthGuard)
     findOne(@Param('id') id: string) {
-        return this.userService.findOne(+id);
+        return this.userService.findUserById(+id);
     }
 }
