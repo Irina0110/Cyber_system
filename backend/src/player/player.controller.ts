@@ -38,6 +38,12 @@ export class PlayerController {
         return this.playerService.findOne(+id);
     }
 
+    @Get('/statistics/:id')
+    @UseGuards(AuthGuard)
+    getPlayerStatistics(@Param('id') id: string) {
+        return this.playerService.getPlayerStatistics(+id);
+    }
+
     @Patch(':id')
     @UseGuards(AuthGuard)
     update(@Param('id') id: string, @Body() updatePlayerDto: UpdatePlayerDto) {

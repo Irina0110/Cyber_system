@@ -47,6 +47,20 @@ export class PlayerService {
         });
     }
 
+    async getPlayerStatistics(playerId: number) {
+        const beatLeader = await  this.prisma.beatLeaderStatistics.findUnique({
+            where: {
+                playerId
+            }
+        })
+        const scoreSaber = await  this.prisma.scoreSaberStatistics.findUnique({
+            where: {
+                playerId
+            }
+        })
+        return {beatLeaderStatistics: beatLeader, scoreSaberStatistics: scoreSaber}
+    }
+
     async findOne(id: number) {
         const player = await this.prisma.player.findFirst({
             where: {
