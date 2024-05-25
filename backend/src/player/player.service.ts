@@ -46,12 +46,19 @@ export class PlayerService {
         });
     }
 
-    findOne(id: number) {
-        return this.prisma.player.findFirst({
+    async findOne(id: number) {
+        const player = await this.prisma.player.findFirst({
             where: {
-                id
+                userId: id
             }
         });
+
+        const team = player ? await this.prisma.team.findUnique({where: {id: player.teamId}}) : null
+
+        return {
+            ...player,
+            teamName: team.name
+        }
     }
 
     update(id: number, playerInfo: UpdatePlayerDto) {
