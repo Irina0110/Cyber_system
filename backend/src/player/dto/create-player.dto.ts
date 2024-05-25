@@ -7,6 +7,10 @@ export class CreatePlayerDto {
     @IsNotEmpty()
     userId: number;
 
+    @ApiProperty()
+    @IsNotEmpty()
+    name: string;
+
     @ApiProperty({required: false})
     beatLeaderId?: string;
 

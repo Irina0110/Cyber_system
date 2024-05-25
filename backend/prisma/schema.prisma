@@ -36,6 +36,7 @@ enum Role {
 model Player {
   id                   Int                   @id @default(autoincrement())
   userId               Int                   @unique
+  name                 String
   team                 Team?                 @relation(fields: [teamId], references: [id]) // Ссылка на команду (может быть null, если игрок не состоит в команде)
   avatar               String?
   ratings              Rating[] // Обратная связь для оценок

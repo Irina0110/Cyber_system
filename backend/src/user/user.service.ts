@@ -96,9 +96,9 @@ export class UserService {
 
         // Определение события в зависимости от роли пользователя
         if (role === 'PLAYER') {
-            await this.eventService.userCreatedAsPlayer({ role, userId: newUser.id });
+            await this.eventService.userCreatedAsPlayer({role, userId: newUser.id, name: newUser.username});
         } else if (role === 'COACH') {
-            await this.eventService.userCreatedAsCoach({ role, userId: newUser.id });
+            await this.eventService.userCreatedAsCoach({role, userId: newUser.id});
         }
         return this._toUserDto(newUser);
     }

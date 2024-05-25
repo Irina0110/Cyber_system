@@ -14,7 +14,7 @@ export class PlayerService {
     }
 
     async create(playerDto: CreatePlayerDto): Promise<CreatePlayerDto> {
-        const {userId} = playerDto;
+        const {userId, name} = playerDto;
 
         const existingPlayer = await this.prisma.player.findUnique({where: {userId}});
 
@@ -24,7 +24,8 @@ export class PlayerService {
 
         const newPlayer = await this.prisma.player.create({
             data: {
-                userId
+                userId,
+                name
             },
         });
 
@@ -53,11 +54,10 @@ export class PlayerService {
             }
         });
 
-        const team = player && player.teamId ? await this.prisma.team.findUnique({where: {id: player.teamId}}) : null
+        player['teamName'] = player && player.teamId ? await this.prisma.team.findUnique({where: {id: player.teamId}}) : null
 
         return {
-            ...player,
-            teamName: team.name
+            ...player
         }
     }
 
@@ -74,7 +74,7 @@ export class PlayerService {
     }
 
     private _toPlayerDto(player: Player): CreatePlayerDto {
-        const {id, userId} = player;
-        return {id, userId};
+        const {id, userId, name} = player;
+        return {id, userId, name};
     }
 }
