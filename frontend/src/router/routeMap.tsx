@@ -3,6 +3,7 @@ import {SignUpPage} from "@/pages/SignUp/SignUp.tsx";
 import {routes} from "@/router/routes.ts";
 import {ResetPasswordPage} from "@/pages/ResetPassword/ResetPassword.tsx";
 import {Error} from "@/pages/Error/Error.tsx";
+import {PlayerProfile} from "@/pages/PlayerProfile/PlayerProfile.tsx";
 
 
 export const Elements = [
@@ -29,6 +30,12 @@ export const Elements = [
         path: routes.auth.reset,
         isLayout: false,
         element: <ResetPasswordPage/>
+    },
+    {
+        isProtected: true,
+        path: routes.player.profile,
+        isLayout: true,
+        element: <PlayerProfile/>
     },
     {
         isProtected: false,

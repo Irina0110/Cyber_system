@@ -6,4 +6,8 @@ type ProtectRouteProps = PropsWithChildren & {
     rule: boolean;
 };
 
-export const ProtectRoute: FC<ProtectRouteProps> = ({ children, rule }) => (rule ? children : <Navigate to={routes.auth.login} />);
+
+export const ProtectRoute: FC<ProtectRouteProps> = ({ children, rule }) => {
+    console.log(rule)
+    return (rule ? children : <Navigate to={routes.auth.login}/>)
+};

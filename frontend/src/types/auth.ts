@@ -26,3 +26,9 @@ export type CHECK_TOCKEN = {
 export type CHECK_TOCKEN_RESPONSE = {
     tokenValid: boolean
 }
+
+export type AUTH_STATUS = AUTH_LOGIN_RESPONSE & {
+    id: number;
+    email: string;
+    role: string;
+}

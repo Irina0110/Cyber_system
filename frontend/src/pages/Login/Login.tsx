@@ -18,6 +18,7 @@ import Logo from '../../../public/Logo-full.svg?url'
 import {useNavigate} from "react-router-dom";
 import {routes} from "@/router/routes.ts";
 import {auth} from "@/services/auth.tsx";
+import {commonStore} from "@/store/common.ts";
 
 const CLASS = 'login-page'
 
@@ -50,11 +51,16 @@ export const LoginPage: FC = () => {
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         auth.login(values).then((response) => {
             console.log(response)
-            if (response.status == 200) {
+            if (response.statusText == 'OK') {
+                commonStore.user.set(response.data);
                 localStorage.setItem('token', response.data.accessToken);
                 localStorage.setItem('tokenExpires', response.data.expiresIn);
+                if(response.data.role === 'PLAYER') {
+                    onNavigate(routes.player.profile)
+                } else {
+                    onNavigate('/coach/profile')
+                }
             }
-            onNavigate('/')
         }).catch(() => {
             form.setError('root', {message: "User doesn't exist"})
         })

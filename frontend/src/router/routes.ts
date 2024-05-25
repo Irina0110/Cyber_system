@@ -5,6 +5,9 @@ export const routes = {
         signup: '/signUp',
         reset: '/reset'
     },
+    player: {
+        profile: '/player/profile'
+    },
     error: '/error',
     notFound: '*'
 }
