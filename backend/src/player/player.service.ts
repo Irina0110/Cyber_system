@@ -53,7 +53,7 @@ export class PlayerService {
             }
         });
 
-        const team = player ? await this.prisma.team.findUnique({where: {id: player.teamId}}) : null
+        const team = player && player.teamId ? await this.prisma.team.findUnique({where: {id: player.teamId}}) : null
 
         return {
             ...player,
