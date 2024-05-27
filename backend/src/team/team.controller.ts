@@ -9,11 +9,12 @@ import {
 import {TeamService} from './team.service';
 import {CreateTeamDto} from './dto/create-team.dto';
 import {UpdateTeamDto} from './dto/update-team.dto';
-import {ApiTags} from '@nestjs/swagger';
+import {ApiBearerAuth, ApiTags} from '@nestjs/swagger';
 import {AuthGuard} from "../auth/auth.guard";
 
 @ApiTags('team')
 @Controller('team')
+@ApiBearerAuth()
 export class TeamController {
     constructor(private readonly teamService: TeamService) {
     }
@@ -34,6 +35,12 @@ export class TeamController {
     @UseGuards(AuthGuard)
     findOne(@Param('id') id: string) {
         return this.teamService.findOne(+id);
+    }
+
+    @Get()
+    @UseGuards(AuthGuard)
+    findAll() {
+        return this.teamService.findAll();
     }
 
     @Patch(':id')

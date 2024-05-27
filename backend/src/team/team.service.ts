@@ -20,9 +20,10 @@ export class TeamService {
 
         const newTeam = await this.prisma.team.create({
             data: {
-                name, coachId
+                name, coachId, coachName: coach.username
             },
         });
+        
         return this._toTeamDto(newTeam)
     }
 
@@ -32,6 +33,10 @@ export class TeamService {
                 coachId
             }
         });
+    }
+
+    findAll() {
+        return this.prisma.team.findMany();
     }
 
     findOne(id: number) {
@@ -52,7 +57,7 @@ export class TeamService {
     }
 
     private _toTeamDto(team: Team): CreateTeamDto {
-        const {id, name, coachId} = team;
-        return {id, name, coachId};
+        const {id, name, coachId, coachName} = team;
+        return {id, name, coachId, coachName};
     }
 }

@@ -13,7 +13,7 @@ export class CoachService {
     }
 
     async create(coachDto: CreateCoachDto): Promise<CreateCoachDto> {
-        const {userId} = coachDto;
+        const {userId, username} = coachDto;
         const existingCoach = await this.prisma.coach.findUnique({where: {userId}});
 
         if (existingCoach) {
@@ -22,7 +22,7 @@ export class CoachService {
 
         const newCoach = await this.prisma.coach.create({
             data: {
-                userId
+                userId, username
             },
         });
 
@@ -49,7 +49,7 @@ export class CoachService {
 
 
     private _toCoachDto(coach: Coach): CreateCoachDto {
-        const {id, userId} = coach;
-        return {id, userId};
+        const {id, userId, username} = coach;
+        return {id, userId, username};
     }
 }

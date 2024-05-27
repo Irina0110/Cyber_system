@@ -9,4 +9,6 @@ export class CreateTeamDto {
 
     @ApiProperty()
     coachId: number;
+
+    coachName: string;
 }

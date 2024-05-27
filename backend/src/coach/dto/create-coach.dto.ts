@@ -7,4 +7,6 @@ export class CreateCoachDto {
     @ApiProperty()
     @IsNotEmpty()
     userId: number
+
+    username: string;
 }

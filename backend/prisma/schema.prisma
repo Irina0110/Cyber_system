@@ -138,10 +138,11 @@ model ScoreSaberStatistics {
 
 // Определение модели для тренеров
 model Coach {
-  id     Int    @id @default(autoincrement())
-  userId Int    @unique
-  teams  Team[] // Ссылки на команды, которыми руководит тренер
-  User   User?
+  id       Int     @id @default(autoincrement())
+  userId   Int     @unique
+  teams    Team[] // Ссылки на команды, которыми руководит тренер
+  User     User?
+  username String?
 }
 
 // Определение модели для рейтинга
@@ -179,9 +180,10 @@ model Goal {
 
 // Определение модели для команд
 model Team {
-  id      Int      @id @default(autoincrement())
-  name    String
-  players Player[] // Ссылки на участников команды
-  coach   Coach?   @relation(fields: [coachId], references: [id]) // Ссылка на тренера команды (может быть null)
-  coachId Int?
+  id        Int      @id @default(autoincrement())
+  name      String
+  players   Player[] // Ссылки на участников команды
+  coach     Coach?   @relation(fields: [coachId], references: [id]) // Ссылка на тренера команды (может быть null)
+  coachId   Int?
+  coachName String?
 }

@@ -9,11 +9,12 @@ import {
 import {CoachService} from './coach.service';
 import {CreateCoachDto} from './dto/create-coach.dto';
 import {UpdateCoachDto} from './dto/update-coach.dto';
-import {ApiTags} from '@nestjs/swagger';
+import {ApiBearerAuth, ApiTags} from '@nestjs/swagger';
 import {AuthGuard} from "../auth/auth.guard";
 
 @ApiTags('coach')
 @Controller('coach')
+@ApiBearerAuth()
 export class CoachController {
     constructor(private readonly coachService: CoachService) {
     }
