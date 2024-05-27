@@ -4,6 +4,7 @@ import {routes} from "@/router/routes.ts";
 import {ResetPasswordPage} from "@/pages/ResetPassword/ResetPassword.tsx";
 import {Error} from "@/pages/Error/Error.tsx";
 import {PlayerProfile} from "@/pages/PlayerProfile/PlayerProfile.tsx";
+import {Teams} from "@/pages/Teams/Teams.tsx";
 
 
 export const Elements = [
@@ -36,6 +37,12 @@ export const Elements = [
         path: routes.player.profile,
         isLayout: true,
         element: <PlayerProfile/>
+    },
+    {
+        isProtected: true,
+        path: routes.teams.all,
+        isLayout: true,
+        element: <Teams/>
     },
     {
         isProtected: false,

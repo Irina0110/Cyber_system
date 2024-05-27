@@ -1,16 +1,19 @@
-import {createBrowserRouter, Route, RouterProvider, Routes} from 'react-router-dom';
+import {createBrowserRouter, Route, RouterProvider, Routes, useNavigate} from 'react-router-dom';
 import {ProtectRoute} from '@/hoc/ProtectedRoute.tsx';
 import {Elements} from "@/router/routeMap.tsx";
 import './App.scss'
 import {Layout} from "@/components/common/Layout/Layout.tsx";
-import { useEffect, useState} from "react";
+import {useCallback, useLayoutEffect} from "react";
+import {auth} from "@/services/auth.tsx";
+import {commonStore} from "@/store/common.ts";
+import {isTokenExpired} from "@/lib/utils.ts";
+import {routes} from "@/router/routes.ts";
 
 
 export const Root = () => {
-    const [isTokenExpired, setTokenExpired] = useState(false);
-    const expiresIn = localStorage.getItem('tokenExpires');
-    const currentTime = Date.now();
-
+    const navigate = useNavigate();
+    const onNavigate = useCallback((url: string) => navigate(`${url}`, {state: true}), [navigate]);
+    const tokenExpires = localStorage.getItem('tokenExpires')
 
     const routers =
         Elements.map((router) => (
@@ -19,7 +22,7 @@ export const Root = () => {
                 path={router.path}
                 element={
                     router.isProtected ?
-                        <ProtectRoute rule={true}>
+                        <ProtectRoute rule={!isTokenExpired(tokenExpires ? +tokenExpires : 0)}>
                             {router?.isLayout ? <Layout>{router.element}</Layout> : router.element}
                         </ProtectRoute>
                         : router?.isLayout ? (
@@ -29,23 +32,15 @@ export const Root = () => {
             />
         ));
 
-    useEffect(() => {
-        const checkTokenExpiration = async () => {
-            try {
-                const expiresIn = localStorage.getItem('tokenExpires');
-                const currentTime = Date.now();
-                if (!expiresIn || +expiresIn < currentTime) {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('tokenExpires');
-                    setTokenExpired(true);
-                } else {
-                    setTokenExpired(false);
-                }
-            } catch (error) {
-                console.error('Error checking token expiration:', error);
+    useLayoutEffect(() => {
+        auth.status().then((response) => {
+            if (response.statusText === 'OK' && isTokenExpired(+response.data.expiresIn)) {
+                commonStore.user.set(response.data)
+            } else {
+                localStorage.clear();
+                onNavigate(routes.auth.login)
             }
-        };
-        checkTokenExpiration();
+        })
     }, []);
 
 

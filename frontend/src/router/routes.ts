@@ -8,6 +8,10 @@ export const routes = {
     player: {
         profile: '/player/profile/:playerId'
     },
+    teams: {
+        all: '/teams',
+        team: '/teams/:teamId'
+    },
     error: '/error',
     notFound: '*'
 }

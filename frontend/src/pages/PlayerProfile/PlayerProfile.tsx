@@ -60,7 +60,6 @@ export const PlayerProfile: FC = () => {
                 onNavigate(routes.auth.login)
             } else {
                 player.profile(+params.playerId).then((response) => {
-                    console.log(response)
                     if (response.statusText === 'OK') {
                         playerStore.profile.set(response.data)
                     }
@@ -72,9 +71,7 @@ export const PlayerProfile: FC = () => {
                     }
                 })
             }
-
         }
-
     }, []);
 
     return (
