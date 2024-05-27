@@ -19,6 +19,7 @@ import {
     PaginationNext,
     PaginationPrevious
 } from "@/components/ui/pagination.tsx";
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.tsx";
 
 const CLASS = 'player-profile'
 
@@ -82,7 +83,10 @@ export const PlayerProfile: FC = () => {
                     <h1 className={`${CLASS}__title`}>Player profile</h1>
                     <div className={cn(`${CLASS}__card`, 'h-full')}>
                         <div className={`${CLASS}__info`}>
-                            <img src={profile.avatar} alt={'avatar'}/>
+                            <Avatar className={'w-17 h-17'}>
+                                <AvatarImage src={profile.avatar} alt={"avatar"} />
+                                <AvatarFallback>{profile.name}</AvatarFallback>
+                            </Avatar>
                             <div className={'flex flex-col gap-1'}>
                                 <h3>{profile.name}</h3>
                                 {profile?.teamName && <span>Team: {profile?.teamName}</span>}
