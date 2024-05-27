@@ -6,7 +6,7 @@ import {playerStore} from "@/store/player.ts";
 import {jwtDecode} from "jwt-decode";
 import {JWT_PAYLOAD} from "@/types/common.ts";
 import {cn, isTokenExpired} from "@/lib/utils.ts";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {routes} from "@/router/routes.ts";
 import {PLAYER_STATISTICS} from "@/types/player.ts";
 import {Badge} from "@/components/common/Badge/Badge.tsx";
@@ -26,6 +26,7 @@ const CLASS = 'player-profile'
 const ITEMS_PER_PAGE = 12;
 
 export const PlayerProfile: FC = () => {
+    const params = useParams();
     const profile = useStore(playerStore.profile)
     const navigate = useNavigate();
     const onNavigate = useCallback((url: string) => navigate(`${url}`, {state: true}), [navigate]);
@@ -52,19 +53,19 @@ export const PlayerProfile: FC = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token) {
+        if (token && params.playerId) {
             const user = jwtDecode<JWT_PAYLOAD>(token)
             if (isTokenExpired(user.exp)) {
                 localStorage.clear();
                 onNavigate(routes.auth.login)
             } else {
-                player.profile(user.id).then((response) => {
+                player.profile(+params.playerId).then((response) => {
                     console.log(response)
                     if (response.statusText === 'OK') {
                         playerStore.profile.set(response.data)
                     }
                 })
-                player.statistics(user.id).then((response) => {
+                player.statistics(+params.playerId).then((response) => {
                     if (response.statusText === 'OK') {
                         console.log(response)
                         setStat(response.data)

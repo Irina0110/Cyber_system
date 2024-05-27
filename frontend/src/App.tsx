@@ -10,7 +10,7 @@ export const Root = () => {
     const [isTokenExpired, setTokenExpired] = useState(false);
     const expiresIn = localStorage.getItem('tokenExpires');
     const currentTime = Date.now();
-    console.log(!expiresIn || +expiresIn < currentTime)
+
 
     const routers =
         Elements.map((router) => (

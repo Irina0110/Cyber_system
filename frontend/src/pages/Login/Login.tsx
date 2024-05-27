@@ -56,7 +56,7 @@ export const LoginPage: FC = () => {
                 localStorage.setItem('token', response.data.accessToken);
                 localStorage.setItem('tokenExpires', response.data.expiresIn);
                 if(response.data.role === 'PLAYER') {
-                    onNavigate(routes.player.profile)
+                    onNavigate(`/player/profile/${response.data.id}`)
                 } else {
                     onNavigate('/coach/profile')
                 }

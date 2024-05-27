@@ -6,7 +6,7 @@ export const routes = {
         reset: '/reset'
     },
     player: {
-        profile: '/player/profile'
+        profile: '/player/profile/:playerId'
     },
     error: '/error',
     notFound: '*'
