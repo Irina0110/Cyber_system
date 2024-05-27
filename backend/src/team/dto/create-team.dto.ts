@@ -11,4 +11,7 @@ export class CreateTeamDto {
     coachId: number;
 
     coachName: string;
+
+    totalPPBeatLeader?: string | null;
+    totalPPScoreSaber?: string | null;
 }

@@ -180,10 +180,12 @@ model Goal {
 
 // Определение модели для команд
 model Team {
-  id        Int      @id @default(autoincrement())
-  name      String
-  players   Player[] // Ссылки на участников команды
-  coach     Coach?   @relation(fields: [coachId], references: [id]) // Ссылка на тренера команды (может быть null)
-  coachId   Int?
-  coachName String?
+  id                Int      @id @default(autoincrement())
+  name              String
+  players           Player[] // Ссылки на участников команды
+  coach             Coach?   @relation(fields: [coachId], references: [id]) // Ссылка на тренера команды (может быть null)
+  coachId           Int?
+  coachName         String?
+  totalPPBeatLeader String?
+  totalPPScoreSaber String?
 }

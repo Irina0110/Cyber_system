@@ -5,10 +5,11 @@ import {PlayerService} from "../player/player.service";
 import {PrismaService} from "../prisma.service";
 import {UserInfo} from "./interfaces/beatleader-responeses.interface";
 import {ScoresaberResponse} from "./interfaces/scoresaber-responeses.interface";
+import {TeamService} from "../team/team.service";
 
 @Injectable()
 export class CronesService {
-    constructor(private readonly playersService: PlayerService, private readonly prismaService: PrismaService) {
+    constructor(private readonly playersService: PlayerService, private readonly teamsService: TeamService, private readonly prismaService: PrismaService) {
     }
 
     @Cron(CronExpression.EVERY_10_HOURS)
@@ -152,6 +153,46 @@ export class CronesService {
 
         } catch (error) {
             console.error('Ошибка при получении списка пользователей:', error);
+        }
+    }
+
+    @Cron(CronExpression.EVERY_10_SECONDS)
+    async updateTeamStatistics() {
+        try {
+            const teamsToUpdate = await this.teamsService.findAll();
+            await Promise.all(
+                teamsToUpdate.map(async (team) => {
+                    try {
+                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                        let totalPPBeatLeader = 0;
+                        // eslint-totalPPScoreSaber-next-line @typescript-eslint/no-unused-vars
+                        let totalPPScoreSaber = 0;
+                        const allTeamPlayers = await this.playersService.findPlayersByTeamId(team.id)
+
+                        await Promise.all(allTeamPlayers.map(async (player) => {
+                            const playerStatistics = await this.playersService.getPlayerStatistics(player.id);
+                            if (playerStatistics.beatLeaderStatistics.pp) {
+                                totalPPBeatLeader += playerStatistics.beatLeaderStatistics.pp;
+                            }
+                            if (playerStatistics.scoreSaberStatistics.pp) {
+                                totalPPScoreSaber += playerStatistics.scoreSaberStatistics.pp
+                            }
+                        }))
+
+                        await this.teamsService.update(team.id, {
+                            totalPPScoreSaber: `${totalPPScoreSaber}`,
+                            totalPPBeatLeader: `${totalPPBeatLeader}`
+                        })
+                    } catch (error) {
+                        console.error(
+                            `Ошибка при обновлении данных для окманды с ID ${team.id}:`,
+                            error,
+                        );
+                    }
+                }))
+
+        } catch (error) {
+            console.error('Ошибка при получении списка команд:', error);
         }
     }
 }
