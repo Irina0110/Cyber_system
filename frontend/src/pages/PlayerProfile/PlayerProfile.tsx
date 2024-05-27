@@ -12,14 +12,42 @@ import {PLAYER_STATISTICS} from "@/types/player.ts";
 import {Badge} from "@/components/common/Badge/Badge.tsx";
 import {METRICS} from "@/constants/metrics.ts";
 import {Table, TableCell, TableRow} from "@/components/ui/table.tsx";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationNext,
+    PaginationPrevious
+} from "@/components/ui/pagination.tsx";
 
 const CLASS = 'player-profile'
+
+const ITEMS_PER_PAGE = 12;
 
 export const PlayerProfile: FC = () => {
     const profile = useStore(playerStore.profile)
     const navigate = useNavigate();
     const onNavigate = useCallback((url: string) => navigate(`${url}`, {state: true}), [navigate]);
     const [stat, setStat] = useState<PLAYER_STATISTICS | null>(null)
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const METRICS_KEYS = Object.keys(METRICS);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const currentMetricsKeys = METRICS_KEYS.slice(startIndex, endIndex);
+
+    const handleNextPage = () => {
+        if (currentPage < Math.ceil(METRICS_KEYS.length / ITEMS_PER_PAGE)) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -54,28 +82,17 @@ export const PlayerProfile: FC = () => {
                     <h1 className={`${CLASS}__title`}>Player profile</h1>
                     <div className={cn(`${CLASS}__card`, 'h-full')}>
                         <div className={`${CLASS}__info`}>
-                            <img src={profile.avatar}/>
+                            <img src={profile.avatar} alt={'avatar'}/>
                             <div className={'flex flex-col gap-1'}>
                                 <h3>{profile.name}</h3>
                                 {profile?.teamName && <span>Team: {profile?.teamName}</span>}
+                                <span>Steam ID: {profile?.beatLeaderId}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className={`${CLASS}__card`}>
-                    <div className={`${CLASS}__stat`}>
-                        <h4>BeatLeader Statistics</h4>
-                        {stat?.beatLeaderStatistics && <div className={`${CLASS}__stat__badges`}>
-                            <Badge label={'World'} value={stat?.beatLeaderStatistics.rank}/>
-                            <Badge label={'Country'} value={stat?.beatLeaderStatistics.countryRank}/>
-                            <Badge label={'Top PP'} value={stat?.beatLeaderStatistics.topPp.toFixed(2)}/>
-                            <Badge label={'Average ranked acc'}
-                                   value={`${(stat?.beatLeaderStatistics?.averageRankedAccuracy * 100).toFixed(2)} %`}/>
-                            <Badge label={'Total ranked score'}
-                                   value={stat?.beatLeaderStatistics.totalRankedScore}/>
-                        </div>}
-                    </div>
                     <div className={`${CLASS}__stat`}>
                         <h4>Score saber Statistics</h4>
                         {stat?.scoreSaberStatistics && <div className={`${CLASS}__stat__badges`}>
@@ -88,13 +105,25 @@ export const PlayerProfile: FC = () => {
                             <Badge label={'Total Score'} value={stat?.scoreSaberStatistics.totalScore}/>
                         </div>}
                     </div>
+                    <div className={`${CLASS}__stat`}>
+                        <h4>BeatLeader Statistics</h4>
+                        {stat?.beatLeaderStatistics && <div className={`${CLASS}__stat__badges`}>
+                            <Badge label={'World'} value={stat?.beatLeaderStatistics.rank}/>
+                            <Badge label={'Country'} value={stat?.beatLeaderStatistics.countryRank}/>
+                            <Badge label={'Top PP'} value={stat?.beatLeaderStatistics.topPp.toFixed(2)}/>
+                            <Badge label={'Average ranked acc'}
+                                   value={`${(stat?.beatLeaderStatistics?.averageRankedAccuracy * 100).toFixed(2)} %`}/>
+                            <Badge label={'Total ranked score'}
+                                   value={stat?.beatLeaderStatistics.totalRankedScore}/>
+                        </div>}
+                    </div>
                 </div>
             </div>
 
 
             <div className={'flex gap-3'}>
                 {stat?.scoreSaberStatistics && <div className={cn(`${CLASS}__card`, 'w-1/2')}>
-                    <h4>Score saber Statistics</h4>
+                    <h4 className={'font-bold'}>Score saber Statistics</h4>
                     <Table>
                         {
                             Object.keys(METRICS).map((key) => {
@@ -116,27 +145,34 @@ export const PlayerProfile: FC = () => {
                     </Table>
                 </div>}
             {stat?.beatLeaderStatistics && <div className={cn(`${CLASS}__card`, 'w-1/2')}>
-                <h4>BeatLeader Statistics</h4>
+                <h4 className={'font-bold'}>BeatLeader Statistics</h4>
                 <Table>
-                    {
-                        Object.keys(METRICS).map((key) => {
-                            const isTimeMetric = METRICS[key].toLowerCase().includes('time');
-                            if (key in (stat.beatLeaderStatistics) && !isTimeMetric) {
-                                return (
-                                    <TableRow>
-                                        <TableCell>
-                                            {METRICS[key]}
-                                        </TableCell>
-                                        <TableCell>
-                                            {stat?.beatLeaderStatistics[key]}
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            }
-                            return null;
-                        })
-                    }
+                    {currentMetricsKeys.map((key) => {
+                        const isTimeMetric = METRICS[key].toLowerCase().includes('time');
+                        if (key in stat.beatLeaderStatistics && !isTimeMetric) {
+                            return (
+                                <TableRow key={key}>
+                                    <TableCell>{METRICS[key]}</TableCell>
+                                    <TableCell>{stat.beatLeaderStatistics[key]}</TableCell>
+                                </TableRow>
+                            );
+                        }
+                        return null;
+                    })}
                 </Table>
+                <Pagination>
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious onClick={handlePreviousPage} isActive={currentPage !== 1} />
+                        </PaginationItem>
+                        <PaginationItem>
+                            {`Page ${currentPage} of ${Math.ceil(METRICS_KEYS.length / ITEMS_PER_PAGE)}`}
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationNext onClick={handleNextPage} isActive={currentPage !== Math.ceil(METRICS_KEYS.length / ITEMS_PER_PAGE)} />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
             </div>}
             </div>
 </div>

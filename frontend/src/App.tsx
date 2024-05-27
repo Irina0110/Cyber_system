@@ -1,4 +1,4 @@
-import {createBrowserRouter, Navigate, Route, RouterProvider, Routes, useNavigate} from 'react-router-dom';
+import {createBrowserRouter, Route, RouterProvider, Routes} from 'react-router-dom';
 import {ProtectRoute} from '@/hoc/ProtectedRoute.tsx';
 import {Elements} from "@/router/routeMap.tsx";
 import './App.scss'
