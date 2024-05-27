@@ -33,13 +33,22 @@ export class PlayerService {
         return this._toPlayerDto(newPlayer);
     }
 
-    findPlayersByTeamId(teamId: number) {
-        return this.prisma.player.findMany({
+    async findPlayersByTeamId(teamId: number) {
+        const players = await this.prisma.player.findMany({
             where: {
                 teamId
             }
         });
+
+        return await Promise.all(players.map(async (player) => {
+            const statistics = await this.getPlayerStatistics(player.id);
+            return {
+                ...player,
+                statistics
+            };
+        }));
     }
+
 
     findPlayersToUpdate() {
         return this.prisma.player.findMany({
