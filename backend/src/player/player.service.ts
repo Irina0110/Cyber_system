@@ -86,10 +86,7 @@ export class PlayerService {
 
     update(id: number, playerInfo: UpdatePlayerDto) {
         return this.prisma.player.update({
-            data: {
-                beatLeaderId: playerInfo.beatLeaderId?.toString(),
-                scoreSaberId: playerInfo.scoreSaberId?.toString(),
-            },
+            data: playerInfo,
             where: {
                 id
             }
