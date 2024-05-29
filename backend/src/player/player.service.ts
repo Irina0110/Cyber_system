@@ -41,7 +41,7 @@ export class PlayerService {
         });
 
         return await Promise.all(players.map(async (player) => {
-            const statistics = await this.getPlayerStatistics(player.id);
+            const statistics = await this.getPlayerStatistics(player.userId);
             return {
                 ...player,
                 statistics
@@ -56,18 +56,23 @@ export class PlayerService {
         });
     }
 
-    async getPlayerStatistics(playerId: number) {
-        const beatLeader = await  this.prisma.beatLeaderStatistics.findUnique({
-            where: {
-                playerId
-            }
-        })
-        const scoreSaber = await  this.prisma.scoreSaberStatistics.findUnique({
-            where: {
-                playerId
-            }
-        })
-        return {beatLeaderStatistics: beatLeader, scoreSaberStatistics: scoreSaber}
+    async getPlayerStatistics(userId: number) {
+        const player =  await this.prisma.player.findUnique({where: {userId}})
+        if (player) {
+            const beatLeader = await this.prisma.beatLeaderStatistics.findUnique({
+                where: {
+                    playerId: player.id
+                }
+            })
+            const scoreSaber = await  this.prisma.scoreSaberStatistics.findUnique({
+                where: {
+                    playerId: player.id
+                }
+            })
+            return {beatLeaderStatistics: beatLeader, scoreSaberStatistics: scoreSaber}
+        }
+
+        return {beatLeaderStatistics: null, scoreSaberStatistics: null}
     }
 
     async findOne(id: number) {

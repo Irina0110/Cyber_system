@@ -170,11 +170,11 @@ export class CronesService {
                         const allTeamPlayers = await this.playersService.findPlayersByTeamId(team.id)
 
                         await Promise.all(allTeamPlayers.map(async (player) => {
-                            const playerStatistics = await this.playersService.getPlayerStatistics(player.id);
-                            if (playerStatistics.beatLeaderStatistics.pp) {
+                            const playerStatistics = await this.playersService.getPlayerStatistics(player.userId);
+                            if (playerStatistics.beatLeaderStatistics) {
                                 totalPPBeatLeader += playerStatistics.beatLeaderStatistics.pp;
                             }
-                            if (playerStatistics.scoreSaberStatistics.pp) {
+                            if (playerStatistics.scoreSaberStatistics) {
                                 totalPPScoreSaber += playerStatistics.scoreSaberStatistics.pp
                             }
                         }))

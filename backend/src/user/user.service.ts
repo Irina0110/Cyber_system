@@ -1,7 +1,6 @@
 import {
     Injectable,
-    NotFoundException,
-    UnauthorizedException,
+    NotFoundException
 } from '@nestjs/common';
 import {CreateUserDto} from './dto/create-user.dto';
 import {compare, genSalt, hash} from 'bcrypt';
@@ -47,7 +46,7 @@ export class UserService {
         const areEqual = await compare(password, user.password);
 
         if (!areEqual) {
-            throw new UnauthorizedException('Invalid credentials');
+            throw new NotFoundException('Invalid login or password');
         }
 
         return this._toUserDto(user);
