@@ -38,8 +38,8 @@ export const Teams:FC = () => {
                             <TableCell>{team.id}</TableCell>
                             <TableCell>{team.name}</TableCell>
                             <TableCell>{team.coachName}</TableCell>
-                            <TableCell>{team.totalPPBeatLeader}</TableCell>
-                            <TableCell>{team.totalPPScoreSaber}</TableCell>
+                            <TableCell>{team.totalPPBeatLeader ? (+team.totalPPBeatLeader).toFixed(2) : 0}</TableCell>
+                            <TableCell>{team.totalPPScoreSaber ? (+team.totalPPScoreSaber).toFixed(2) : 0}</TableCell>
                         </TableRow>
                     )}
                 </Table>

@@ -1,6 +1,6 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useCallback, useEffect, useState} from "react";
 import './Team.scss';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {teams} from "@/services/teams.tsx";
 import {TEAM} from "@/types/team.ts";
 import {player as playerService} from "@/services/player.tsx";
@@ -22,6 +22,8 @@ export const Team: FC = () => {
     const player = useStore(playerStore.profile);
     const [team, setTeam] = useState<TEAM>();
     const [members, setMembers] = useState<PLAYER_PROFILE[]>();
+    const navigate = useNavigate();
+    const onNavigate = useCallback((url: string) => navigate(`${url}`, {state: true}), [navigate]);
 
     const handleChangePlayerTeam = (teamId?: number | null) => {
         playerService.playerTeam(player.id, {teamId: teamId ?? null}).then((response) => {
@@ -38,6 +40,10 @@ export const Team: FC = () => {
                 })
             }
         })
+    }
+
+    const handleNavigateToPlayer = (userId: string) => {
+        onNavigate(`/player/profile/${userId}`)
     }
 
     const columns: ColumnDef<PLAYER_PROFILE>[] = [
@@ -121,7 +127,6 @@ export const Team: FC = () => {
             playerService.teamPlayers(match.teamId).then((response) => {
                 if (response.statusText === 'OK') {
                     setMembers(response.data)
-                    console.log(response.data)
                 }
             })
         }
@@ -134,8 +139,8 @@ export const Team: FC = () => {
 
                 <div className={'flex justify-between'}>
                     <div className={'flex gap-4'}>
-                        <Badge label={'Total PP BeatLeader'} value={team?.totalPPBeatLeader ?? 0}/>
-                        <Badge label={'Total PP ScoreSaber'} value={team?.totalPPScoreSaber ?? 0}/>
+                        <Badge label={'Total PP BeatLeader'} value={team?.totalPPBeatLeader ? (+team.totalPPBeatLeader).toFixed(2) : 0}/>
+                        <Badge label={'Total PP ScoreSaber'} value={team?.totalPPScoreSaber ? (+team?.totalPPScoreSaber).toFixed(2) : 0}/>
                         <Badge label={'Players'} value={members?.length}/>
                     </div>
                     {player && player?.teamId === null ?
@@ -159,7 +164,7 @@ export const Team: FC = () => {
                 <div className={`${CLASS}__wrapper`}>
                     <h2 className={`${CLASS}__title`}>Players</h2>
                     <Table className={'overflow-x-scroll'}>
-                        <DataTable columns={columns} data={members}/>
+                        <DataTable columns={columns} data={members} onRowClick={(userId: string) => handleNavigateToPlayer(userId)}/>
                     </Table>
                 </div>
             }

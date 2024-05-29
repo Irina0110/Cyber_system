@@ -22,6 +22,14 @@ export const Header:FC = () => {
         onNavigate(routes.auth.login)
     }
 
+    const handleNavigateToProfile = () => {
+        if (user.role === 'PLAYER') {
+            onNavigate(`/player/profile/${user.id}`)
+        } else {
+            onNavigate(`/player/coach/${user.id}`)
+        }
+    }
+
     return(
         <div className={`${CLASS}__wrapper`}>
             <div className={CLASS}>
@@ -29,7 +37,7 @@ export const Header:FC = () => {
                     <img src={Logo} alt={'logo'}/>
                     <Link to={routes.teams.all} className={`${CLASS}__menu__item`}>Teams</Link>
                 </div>
-                <div className={`${CLASS}__user`}>
+                <div className={`${CLASS}__user`} onClick={handleNavigateToProfile}>
                     <div>{user.username}</div>
                     <Avatar>
                         <AvatarImage src={player.avatar} />
