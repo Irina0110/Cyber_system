@@ -35,8 +35,10 @@ export const SignUpPage: FC = () => {
             {
                 invalid_type_error: "Login is required"
             }
-        ).min(1, {
-            message: "Login is required"
+        ).min(5, {
+            message: "Login must be more than 5 symbols"
+        }).regex(/^[a-zA-Z0-9]*$/, {
+            message: "Login can only contain letters and numbers"
         }),
         password: z.string({
             invalid_type_error: "Password is required"
@@ -55,11 +57,30 @@ export const SignUpPage: FC = () => {
             {
                 message: "Role is required"
             }
-        )
+        ),
+        beatLeaderId: z.string().optional(),
+        scoreSaberId: z.string().optional(),
     }).refine((data) => data.password === data.confirmPassword, {
         message: "Password doesn't match",
         path: ["confirmPassword"]
-    })
+    }).superRefine((data, ctx) => {
+        if (data.role === 'PLAYER') {
+            if (!data.beatLeaderId) {
+                ctx.addIssue({
+                    code: 'custom', // specify the issue code
+                    path: ['beatLeaderId'],
+                    message: "BeatLeader ID is required for role PLAYER"
+                });
+            }
+            if (!data.scoreSaberId) {
+                ctx.addIssue({
+                    code: 'custom', // specify the issue code
+                    path: ['scoreSaberId'],
+                    message: "ScoreSaber ID is required for role PLAYER"
+                });
+            }
+        }
+    });
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -68,15 +89,19 @@ export const SignUpPage: FC = () => {
             email: "",
             password: "",
             confirmPassword: "",
-            role: 'PLAYER'
+            role: 'PLAYER',
+            beatLeaderId: '',
+            scoreSaberId: ''
         },
     })
+
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         auth.signup({
             email: values.email,
             password: values.password,
             role: values.role,
-            username: values.login
+            username: values.login,
+            ...(values.role === 'PLAYER' && {beatLeaderId: values.beatLeaderId, scoreSaberId: values.scoreSaberId}),
         }).then((response) => {
             if (response.data.success) {
                 onNavigate(routes.auth.login)
@@ -180,6 +205,37 @@ export const SignUpPage: FC = () => {
                         </FormItem>
                     )}
                 />
+                {form.getValues().role === 'PLAYER' &&
+                    <>
+                        <FormField
+                            control={form.control}
+                            name="beatLeaderId"
+                            render={({field}) => (
+                                <FormItem className={'w-2/3'}>
+                                    <FormLabel>BeatLeader ID</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="BeatLeader ID" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="scoreSaberId"
+                            render={({field}) => (
+                                <FormItem className={'w-2/3'}>
+                                    <FormLabel>ScoreSaber ID</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="ScoreSaber ID" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                    </>
+
+                }
                 {form.formState.errors.root && <FormMessage>{form.formState.errors.root.message}</FormMessage>}
                 <div className={`${CLASS}__buttons`}>
                     <Button type={'submit'} size={'s'} label={'Sign up'}/>

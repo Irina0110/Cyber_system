@@ -34,6 +34,8 @@ export const LoginPage: FC = () => {
             }
         ).min(1, {
             message: "Login is required"
+        }).regex(/^[a-zA-Z0-9]*$/, {
+            message: "Login can only contain letters and numbers"
         }),
         password: z.string({
             invalid_type_error: "Password is required"

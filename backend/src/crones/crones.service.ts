@@ -12,7 +12,7 @@ export class CronesService {
     constructor(private readonly playersService: PlayerService, private readonly teamsService: TeamService, private readonly prismaService: PrismaService) {
     }
 
-    @Cron(CronExpression.EVERY_10_HOURS)
+    @Cron(CronExpression.EVERY_10_SECONDS)
     async updatePlayersData() {
         try {
             const playersToUpdate = await this.playersService.findPlayersToUpdate();

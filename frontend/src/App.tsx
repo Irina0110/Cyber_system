@@ -41,7 +41,7 @@ export const Root = () => {
                 onNavigate(routes.auth.login)
             }
         })
-    }, []);
+    }, [onNavigate]);
 
 
     return (

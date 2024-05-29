@@ -27,6 +27,12 @@ export class CreateUserDto {
   @ApiProperty({ required: false })
   coachId?: number;
 
+  @ApiProperty({ required: false })
+  beatLeaderId?: string;
+
+  @ApiProperty({ required: false })
+  scoreSaberId?: string;
+
   resetPasswordToken?: string;
   resetPasswordTokenExpires?: string;
 }

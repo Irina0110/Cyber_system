@@ -31,7 +31,6 @@ export const PlayerProfile: FC = () => {
     const navigate = useNavigate();
     const onNavigate = useCallback((url: string) => navigate(`${url}`, {state: true}), [navigate]);
     const [stat, setStat] = useState<PLAYER_STATISTICS | null>(null)
-
     const [currentPage, setCurrentPage] = useState(1);
     const METRICS_KEYS = Object.keys(METRICS);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -72,7 +71,7 @@ export const PlayerProfile: FC = () => {
                 })
             }
         }
-    }, []);
+    }, [params.playerId]);
 
     return (
         <div className={CLASS}>
