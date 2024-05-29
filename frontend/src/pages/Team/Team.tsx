@@ -38,6 +38,11 @@ export const Team: FC = () => {
                         setMembers(response.data)
                     }
                 })
+                teams.team(match.teamId).then((response) => {
+                    if (response.statusText === 'OK') {
+                        setTeam(response.data)
+                    }
+                })
             }
         })
     }
@@ -130,7 +135,7 @@ export const Team: FC = () => {
                 }
             })
         }
-    }, []);
+    }, [match.teamId]);
 
     return (
         <div className={CLASS}>

@@ -11,7 +11,6 @@ export class EventService {
     userCreatedAsCoach(payload: any) {
         this.eventEmitter.emit('user.createdAsCoach', payload);
     }
-
     onUserCreatedAsPlayer(handler: (...args: any[]) => void) {
         this.eventEmitter.on('user.createdAsPlayer', handler);
     }

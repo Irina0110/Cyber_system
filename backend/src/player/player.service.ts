@@ -91,13 +91,13 @@ export class PlayerService {
         }
     }
 
-    update(id: number, playerInfo: UpdatePlayerDto) {
+    async update(id: number, playerInfo: UpdatePlayerDto) {
         return this.prisma.player.update({
             data: playerInfo,
             where: {
                 id
             }
-        });
+        })
     }
 
     private _toPlayerDto(player: Player): CreatePlayerDto {

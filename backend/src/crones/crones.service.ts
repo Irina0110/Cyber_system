@@ -156,16 +156,14 @@ export class CronesService {
         }
     }
 
-    @Cron(CronExpression.EVERY_10_SECONDS)
+    @Cron(CronExpression.EVERY_10_HOURS)
     async updateTeamStatistics() {
         try {
             const teamsToUpdate = await this.teamsService.findAll();
             await Promise.all(
                 teamsToUpdate.map(async (team) => {
                     try {
-                        // eslint-disable-next-line @typescript-eslint/no-unused-vars
                         let totalPPBeatLeader = 0;
-                        // eslint-totalPPScoreSaber-next-line @typescript-eslint/no-unused-vars
                         let totalPPScoreSaber = 0;
                         const allTeamPlayers = await this.playersService.findPlayersByTeamId(team.id)
 
@@ -185,7 +183,7 @@ export class CronesService {
                         })
                     } catch (error) {
                         console.error(
-                            `Ошибка при обновлении данных для окманды с ID ${team.id}:`,
+                            `Ошибка при обновлении данных для команды с ID ${team.id}:`,
                             error,
                         );
                     }
