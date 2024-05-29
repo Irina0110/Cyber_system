@@ -11,7 +11,7 @@ export const Badge:FC<BadgeProps> = ({value, label}) => {
     return(
         <div className={CLASS}>
            <span>{label}</span>
-            {value &&
+            {value !== null &&
                 <>
                     <span>|</span>
                     <span>{value}</span>
