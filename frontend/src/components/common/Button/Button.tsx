@@ -6,7 +6,7 @@ const CLASS = 'button'
 
 interface ButtonsProps {
     label: string,
-    size: 's' | 'm',
+    size: 'xs' | 's' | 'm',
     view?: 'system' | 'ghost',
     onClick?: () => void,
     type: 'submit' | 'button'

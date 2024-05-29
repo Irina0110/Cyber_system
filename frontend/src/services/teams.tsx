@@ -7,4 +7,8 @@ export const teams = {
         return await wrapper.get<TEAM[]>(`team`)
             .then((response) => response);
     },
+    team: async (id: string): Promise<API_RESPONSE<TEAM>> => {
+        return await wrapper.get<TEAM>(`team/${id}`)
+            .then((response) => response);
+    },
 }

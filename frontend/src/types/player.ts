@@ -6,7 +6,8 @@ export type PLAYER_PROFILE = {
     teamId: number | null,
     teamName: string | null,
     scoreSaberId: string | null,
-    beatLeaderId: string | null
+    beatLeaderId: string | null,
+    statistics?: PLAYER_STATISTICS
 }
 
 export type BEATLEADER_STATISTICS = {
@@ -96,3 +97,5 @@ export type PLAYER_STATISTICS = {
     beatLeaderStatistics: BEATLEADER_STATISTICS,
     scoreSaberStatistics: SCORESABER_STATISTICS
 }
+
+export type PLAYER_TEAM = Pick<PLAYER_PROFILE, 'teamId'>

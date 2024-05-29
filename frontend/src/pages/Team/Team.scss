@@ -1,0 +1,29 @@
+.team{
+  @apply flex flex-col gap-9 w-full max-w-[1440px] py-9;
+
+  padding-right: 5%;
+  padding-left: 5%;
+
+  &__title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 36px;
+  }
+
+  &__row {
+    display: flex;
+    gap: 24px;
+  }
+
+  &__wrapper {
+    @apply shadow-lg;
+
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 4px;
+    background: rgba(	25,	26,	33, 0.5);
+    padding: 30px 20px;
+    height: max-content;
+  }
+}

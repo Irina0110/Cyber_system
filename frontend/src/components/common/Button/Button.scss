@@ -6,6 +6,13 @@
   border-radius: 4px;
   font-family: Inter, sans-serif;
 
+  &--xs{
+    height: max-content;
+    font-size: 12px;
+    padding: 5px 10px;
+    width: max-content;
+  }
+
   &--s {
     height: 36px;
     font-size: 14px;

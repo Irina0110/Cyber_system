@@ -2,6 +2,8 @@ export type API_RESPONSE<T> = {
     data: T;
     status: number;
     statusText: string;
+    error?: string;
+    message?: string
 };
 
 export type JWT_PAYLOAD = {
