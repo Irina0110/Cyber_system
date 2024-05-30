@@ -54,7 +54,7 @@ export class PlayerService {
 
     findPlayersToUpdate() {
         return this.prisma.player.findMany({
-            where: { beatLeaderId: { not: null } },
+            where: { beatLeaderId: { not: null }, scoreSaberId: { not: null }  },
         });
     }
 
