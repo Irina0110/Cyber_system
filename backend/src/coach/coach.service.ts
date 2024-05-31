@@ -31,9 +31,9 @@ export class CoachService {
     }
 
     findOne(id: number) {
-        return this.prisma.player.findFirst({
+        return this.prisma.coach.findFirst({
             where: {
-                id
+                userId: id
             }
         });
     }

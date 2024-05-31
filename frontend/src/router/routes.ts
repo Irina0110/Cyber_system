@@ -1,5 +1,4 @@
 export const routes = {
-    main: '/',
     auth: {
         login: '/login',
         signup: '/signUp',
@@ -8,9 +7,13 @@ export const routes = {
     player: {
         profile: '/player/profile/:playerId'
     },
+    coach: {
+        profile: '/coach/profile/:coachId',
+    },
     teams: {
         all: '/teams',
-        team: '/teams/:teamId'
+        team: '/teams/:teamId',
+        create: '/teams/create'
     },
     error: '/error',
     notFound: '*'

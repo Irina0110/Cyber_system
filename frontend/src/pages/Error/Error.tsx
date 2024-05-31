@@ -25,7 +25,7 @@ export const Error: FC = () => {
                     again later.</p>
 
                 <div className={'flex w-48 mt-8'}>
-                    <Button label={'Back home'} size={'s'} type={'button'} view={'system'} onClick={() => onNavigate(routes.main)}/>
+                    <Button label={'Back home'} size={'s'} type={'button'} view={'system'} onClick={() => onNavigate(routes.auth.login)}/>
                 </div>
             </div>
         </div>

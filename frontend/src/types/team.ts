@@ -5,4 +5,5 @@ export type TEAM = {
     coachName: string | null;
     totalPPBeatLeader: string | null;
     totalPPScoreSaber: string | null;
+    playersCount?: number;
 }

@@ -28,12 +28,18 @@ export class TeamService {
         return this._toTeamDto(newTeam)
     }
 
-    findAllTeamWithCoach(coachId: number) {
-        return this.prisma.team.findMany({
+    async findAllTeamWithCoach(coachId: number) {
+        const teams =  await this.prisma.team.findMany({
             where: {
                 coachId
             }
         });
+        for (const team of teams) {
+            const players = await this.playersService.findPlayersByTeamId(team.id);
+            team['playersCount'] = players.length
+        }
+
+        return teams;
     }
 
     findAll() {

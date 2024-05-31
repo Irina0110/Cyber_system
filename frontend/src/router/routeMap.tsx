@@ -6,6 +6,7 @@ import {Error} from "@/pages/Error/Error.tsx";
 import {PlayerProfile} from "@/pages/PlayerProfile/PlayerProfile.tsx";
 import {Teams} from "@/pages/Teams/Teams.tsx";
 import {Team} from "@/pages/Team/Team.tsx";
+import {CoachProfile} from "@/pages/CoachProfile/CoachProfile.tsx";
 
 
 export const Elements = [
@@ -38,6 +39,12 @@ export const Elements = [
         path: routes.player.profile,
         isLayout: true,
         element: <PlayerProfile/>
+    },
+    {
+        isProtected: true,
+        path: routes.coach.profile,
+        isLayout: true,
+        element: <CoachProfile/>
     },
     {
         isProtected: true,

@@ -156,7 +156,7 @@ export class CronesService {
         }
     }
 
-    @Cron(CronExpression.EVERY_10_HOURS)
+    @Cron(CronExpression.EVERY_10_SECONDS)
     async updateTeamStatistics() {
         try {
             const teamsToUpdate = await this.teamsService.findAll();

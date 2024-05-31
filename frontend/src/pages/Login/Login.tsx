@@ -52,16 +52,11 @@ export const LoginPage: FC = () => {
     })
     const onSubmit = (values: z.infer<typeof formSchema>) => {
         auth.login(values).then((response) => {
-            console.log(response)
             if (!response.error) {
                 commonStore.user.set(response.data);
                 localStorage.setItem('token', response.data.accessToken);
                 localStorage.setItem('tokenExpires', response.data.expiresIn);
-                if(response.data.role === 'PLAYER') {
-                    onNavigate(`/player/profile/${response.data.id}`)
-                } else {
-                    onNavigate('/coach/profile')
-                }
+                onNavigate(`/${response.data.role.toLowerCase()}/profile/${response.data.id}`)
             } else {
                 form.setError('root', {message: "User doesn't exist"})
             }
