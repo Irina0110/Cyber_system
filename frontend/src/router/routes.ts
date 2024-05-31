@@ -12,8 +12,7 @@ export const routes = {
     },
     teams: {
         all: '/teams',
-        team: '/teams/:teamId',
-        create: '/teams/create'
+        team: '/teams/:teamId'
     },
     error: '/error',
     notFound: '*'

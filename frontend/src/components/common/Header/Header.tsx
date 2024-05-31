@@ -20,11 +20,7 @@ export const Header:FC = () => {
     }
 
     const handleNavigateToProfile = () => {
-        if (user.role === 'PLAYER') {
-            onNavigate(`/player/profile/${user.id}`)
-        } else {
-            onNavigate(`/player/coach/${user.id}`)
-        }
+        onNavigate(`/${user.role.toLowerCase()}/profile/${user.id}`)
     }
 
     return(

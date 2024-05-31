@@ -7,3 +7,5 @@ export type TEAM = {
     totalPPScoreSaber: string | null;
     playersCount?: number;
 }
+
+export type CREATE_TEAM = Pick<TEAM, 'coachId' | 'name'>
